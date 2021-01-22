@@ -13,6 +13,11 @@ namespace AutoClicker
     {
         public static string SettingsFilePath => Environment.ExpandEnvironmentVariables(Path.Combine(
             Path.GetDirectoryName(Assembly.GetExecutingAssembly().Location),
+            "settings.txt"
+        ));
+
+        public static string SettingsFilePathOld => Environment.ExpandEnvironmentVariables(Path.Combine(
+            Path.GetDirectoryName(Assembly.GetExecutingAssembly().Location),
             "last_settings"
         ));
 

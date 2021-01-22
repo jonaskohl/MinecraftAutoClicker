@@ -91,32 +91,22 @@ namespace AutoClicker
                     var minecraftHandle = mcProcess.MainWindowHandle;
                     FocusToggle(minecraftHandle);
 
-                    //SetControlPropertyThreadSafe(btn_start, "Text", @"Starting in: ");
-                    Thread.Sleep(500);
-
-                    for (var i = 5; i > 0; i--)
-                    {
-                        //SetControlPropertyThreadSafe(btn_start, "Text", i.ToString());
-                        Thread.Sleep(500);
-                    }
+                    if (SettingsManager.Get<bool>("delayBeforeStart"))
+                        Thread.Sleep(SettingsManager.Get<int>("delayLength"));
 
                     FocusToggle(mainHandle);
-                    //SetControlPropertyThreadSafe(btn_start, "Text", @"Running...");
                     Thread.Sleep(500);
 
                     iconAnimateTimer.Start();
+                    if (SettingsManager.Get<bool>("useTaskbarIndicator"))
+                        TaskbarProgress.SetState(Handle, TaskbarProgress.TaskbarStates.Indeterminate);
 
-                    //Right click needs to be ahead of left click for concrete mining
                     if (biRightMouse.Needed)
                     {
                         var clicker = biRightMouse.StartClicking(minecraftHandle);
                         AddToInstanceClickers(mcProcess, clicker);
                     }
 
-                    /*
-                     * This sleep is needed, because if you want to mine concrete, then Minecraft starts to hold left click first
-                     * and it won't place the block in your second hand for some reason...
-                     */
                     Thread.Sleep(100);
 
                     if (biLeftMouse.Needed)
@@ -151,6 +141,7 @@ namespace AutoClicker
             btn_stop.Enabled = false;
             btn_stop.Hide();
             iconAnimateTimer.Stop();
+            TaskbarProgress.SetState(Handle, TaskbarProgress.TaskbarStates.NoProgress);
             Icon = Properties.Resources.mcautoclicker_normal;
 
             foreach (var clickers in instanceClickers.Values)

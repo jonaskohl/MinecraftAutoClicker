@@ -5,3 +5,7 @@ b:useRight=False
 b:holdRight=False
 i:delayRight=200
 s:lastMCPath=
+b:delayBeforeStart=True
+i:delayLength=2500
+b:useTaskbarIndicator=True
+b:alwaysShowGamePicker=False

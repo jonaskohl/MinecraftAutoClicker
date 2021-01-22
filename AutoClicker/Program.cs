@@ -1,4 +1,5 @@
 ﻿using System;
+using System.IO;
 using System.Windows.Forms;
 
 namespace AutoClicker
@@ -13,6 +14,12 @@ namespace AutoClicker
         {
             Application.EnableVisualStyles();
             Application.SetCompatibleTextRenderingDefault(false);
+
+            if (
+                File.Exists(SettingsManager.SettingsFilePathOld) &&
+                !File.Exists(SettingsManager.SettingsFilePath)
+            )
+                File.Move(SettingsManager.SettingsFilePathOld, SettingsManager.SettingsFilePath);
 
             SettingsManager.Load();
 

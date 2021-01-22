@@ -32,7 +32,7 @@ namespace AutoClicker
             invokeSelectedIndexChanged = true;
             comboBox1_SelectedIndexChanged(comboBox1, EventArgs.Empty);
 
-            if (dirs.Where(x => !OptionsTxtChecker.CheckPauseOnLostFocusReady(x)).Count() < 1)
+            if (!SettingsManager.Get<bool>("alwaysShowGamePicker") && dirs.Where(x => !OptionsTxtChecker.CheckPauseOnLostFocusReady(x)).Count() < 1)
                 Close();
             else
                 Opacity = 1;

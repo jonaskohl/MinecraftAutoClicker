@@ -101,6 +101,7 @@
       <DependentUpon>ButtonInputs.cs</DependentUpon>
     </Compile>
     <Compile Include="SettingsFile.cs" />
+    <Compile Include="TaskbarProgress.cs" />
     <Compile Include="Win32Api.cs" />
     <EmbeddedResource Include="AboutBox1.resx">
       <DependentUpon>AboutBox1.cs</DependentUpon>
