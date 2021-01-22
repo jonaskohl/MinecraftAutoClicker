@@ -33,11 +33,13 @@
             this.lblStartTime = new System.Windows.Forms.Label();
             this.btn_stop = new System.Windows.Forms.Button();
             this.lblStarted = new System.Windows.Forms.Label();
-            this.biRightMouse = new AutoClicker.ButtonInputs();
-            this.biLeftMouse = new AutoClicker.ButtonInputs();
             this.iconAnimateTimer = new System.Windows.Forms.Timer(this.components);
             this.mainMenu1 = new System.Windows.Forms.MainMenu(this.components);
+            this.menuItem2 = new System.Windows.Forms.MenuItem();
             this.menuItem1 = new System.Windows.Forms.MenuItem();
+            this.updateTimeTimer = new System.Windows.Forms.Timer(this.components);
+            this.biRightMouse = new AutoClicker.ButtonInputs();
+            this.biLeftMouse = new AutoClicker.ButtonInputs();
             this.SuspendLayout();
             // 
             // btn_start
@@ -54,7 +56,7 @@
             // lblStartTime
             // 
             this.lblStartTime.AutoSize = true;
-            this.lblStartTime.Location = new System.Drawing.Point(87, 141);
+            this.lblStartTime.Location = new System.Drawing.Point(94, 141);
             this.lblStartTime.Name = "lblStartTime";
             this.lblStartTime.Size = new System.Drawing.Size(31, 15);
             this.lblStartTime.TabIndex = 2;
@@ -79,10 +81,38 @@
             this.lblStarted.AutoSize = true;
             this.lblStarted.Location = new System.Drawing.Point(12, 141);
             this.lblStarted.Name = "lblStarted";
-            this.lblStarted.Size = new System.Drawing.Size(60, 15);
+            this.lblStarted.Size = new System.Drawing.Size(85, 15);
             this.lblStarted.TabIndex = 6;
-            this.lblStarted.Text = "Started at:";
+            this.lblStarted.Text = "Running since:";
             this.lblStarted.Visible = false;
+            // 
+            // iconAnimateTimer
+            // 
+            this.iconAnimateTimer.Interval = 250;
+            this.iconAnimateTimer.Tick += new System.EventHandler(this.iconAnimateTimer_Tick);
+            // 
+            // mainMenu1
+            // 
+            this.mainMenu1.MenuItems.AddRange(new System.Windows.Forms.MenuItem[] {
+            this.menuItem2,
+            this.menuItem1});
+            // 
+            // menuItem2
+            // 
+            this.menuItem2.Index = 0;
+            this.menuItem2.Text = "&Settings...";
+            this.menuItem2.Click += new System.EventHandler(this.menuItem2_Click);
+            // 
+            // menuItem1
+            // 
+            this.menuItem1.Index = 1;
+            this.menuItem1.Text = "&About...";
+            this.menuItem1.Click += new System.EventHandler(this.menuItem1_Click);
+            // 
+            // updateTimeTimer
+            // 
+            this.updateTimeTimer.Interval = 500;
+            this.updateTimeTimer.Tick += new System.EventHandler(this.updateTimeTimer_Tick);
             // 
             // biRightMouse
             // 
@@ -118,27 +148,11 @@
             this.biLeftMouse.HoldButtonChanged += new System.EventHandler(this.biLeftMouse_HoldButtonChanged);
             this.biLeftMouse.DelayChanged += new System.EventHandler(this.biLeftMouse_DelayChanged);
             // 
-            // iconAnimateTimer
-            // 
-            this.iconAnimateTimer.Interval = 250;
-            this.iconAnimateTimer.Tick += new System.EventHandler(this.iconAnimateTimer_Tick);
-            // 
-            // mainMenu1
-            // 
-            this.mainMenu1.MenuItems.AddRange(new System.Windows.Forms.MenuItem[] {
-            this.menuItem1});
-            // 
-            // menuItem1
-            // 
-            this.menuItem1.Index = 0;
-            this.menuItem1.Text = "&About...";
-            this.menuItem1.Click += new System.EventHandler(this.menuItem1_Click);
-            // 
             // Main
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(7F, 15F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(604, 169);
+            this.ClientSize = new System.Drawing.Size(604, 166);
             this.Controls.Add(this.lblStarted);
             this.Controls.Add(this.biRightMouse);
             this.Controls.Add(this.biLeftMouse);
@@ -148,10 +162,10 @@
             this.Font = new System.Drawing.Font("Segoe UI", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.FormBorderStyle = System.Windows.Forms.FormBorderStyle.FixedSingle;
             this.MaximizeBox = false;
-            this.Menu = this.mainMenu1;
             this.Name = "Main";
             this.StartPosition = System.Windows.Forms.FormStartPosition.CenterScreen;
             this.Text = "Auto-Clicker";
+            this.Move += new System.EventHandler(this.Main_Move);
             this.ResumeLayout(false);
             this.PerformLayout();
 
@@ -168,6 +182,8 @@
         private System.Windows.Forms.Timer iconAnimateTimer;
         private System.Windows.Forms.MainMenu mainMenu1;
         private System.Windows.Forms.MenuItem menuItem1;
+        private System.Windows.Forms.MenuItem menuItem2;
+        private System.Windows.Forms.Timer updateTimeTimer;
     }
 }
 

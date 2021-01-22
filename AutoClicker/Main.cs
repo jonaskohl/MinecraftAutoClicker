@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Diagnostics;
 using System.Linq;
 using System.Reflection;
+using System.Text.RegularExpressions;
 using System.Threading;
 using System.Windows.Forms;
 
@@ -17,12 +18,25 @@ namespace AutoClicker
             "RLCraft"
         };
 
+        DateTime startTime;
+
         public Main()
         {
             InitializeComponent();
             Icon = Properties.Resources.mcautoclicker_normal;
 
             Shown += Main_Shown;
+
+            Menu = mainMenu1;
+
+            if (!SettingsManager.Get<bool>("alwaysUseDefaultPos") && SettingsManager.Get<bool>("useLastPos"))
+            {
+                StartPosition = FormStartPosition.Manual;
+                Location = new System.Drawing.Point(
+                    SettingsManager.Get<int>("lastPosX"),
+                    SettingsManager.Get<int>("lastPosY")
+                );
+            }
         }
 
         private void Main_Shown(object sender, EventArgs e)
@@ -54,7 +68,7 @@ namespace AutoClicker
                         return;
                     }
 
-                    if(!string.IsNullOrEmpty(notRunning.ProcessTitle))
+                    if (!string.IsNullOrEmpty(notRunning.ProcessTitle))
                         mcProcesses = Process.GetProcesses().Where(b => b.MainWindowTitle == notRunning.ProcessTitle).ToList();
                 }
 
@@ -65,6 +79,8 @@ namespace AutoClicker
                     return;
                 }
 
+                btn_stop.Focus();
+
                 if (mcProcesses.Count > 1)
                 {
                     using (var instancesForm = new MultipleInstances(mcProcesses))
@@ -73,15 +89,18 @@ namespace AutoClicker
                         {
                             EnableElements(true);
                             return;
-                        }   
+                        }
 
                         mcProcesses = instancesForm.SelectedInstances.Select(Process.GetProcessById).ToList();
                     }
                 }
 
-                lblStartTime.Text = DateTime.Now.ToString("MMMM dd HH:mm tt");
+                //lblStartTime.Text = DateTime.Now.ToString("MMMM dd HH:mm tt");
+                startTime = DateTime.Now;
                 lblStarted.Visible = true;
                 lblStartTime.Visible = true;
+                updateTimeTimer.Start();
+                updateTimeTimer_Tick(updateTimeTimer, EventArgs.Empty);
 
                 foreach (var mcProcess in mcProcesses)
                 {
@@ -144,6 +163,15 @@ namespace AutoClicker
             TaskbarProgress.SetState(Handle, TaskbarProgress.TaskbarStates.NoProgress);
             Icon = Properties.Resources.mcautoclicker_normal;
 
+            if (SettingsManager.Get<bool>("focusTargetWhenStopped"))
+            {
+                try
+                {
+                    FocusToggle(instanceClickers.Keys.ElementAt(0).MainWindowHandle);
+                }
+                catch { }
+            }
+
             foreach (var clickers in instanceClickers.Values)
             {
                 foreach (var clicker in clickers)
@@ -156,9 +184,12 @@ namespace AutoClicker
 
             lblStarted.Visible = false;
             lblStartTime.Visible = false;
+            updateTimeTimer.Stop();
 
             //btn_start.Text = "START";
             EnableElements(true);
+
+            btn_start.Focus();
         }
 
         private void EnableElements(bool enable)
@@ -229,6 +260,44 @@ namespace AutoClicker
         {
             using (var f = new AboutBox1())
                 f.ShowDialog(this);
+        }
+
+        private void menuItem2_Click(object sender, EventArgs e)
+        {
+            Process.Start(Environment.ExpandEnvironmentVariables(@"%systemroot%\system32\notepad.exe"), EncodeParameterArgument(SettingsManager.SettingsFilePath));
+        }
+
+        public static string EncodeParameterArgument(string original)
+        {
+            if (string.IsNullOrEmpty(original))
+                return original;
+            string value = Regex.Replace(original, @"(\\*)" + "\"", @"$1\$0");
+            value = Regex.Replace(value, @"^(.*\s.*?)(\\*)$", "\"$1$2$2\"");
+            return value;
+        }
+
+        public static string EncodeParameterArgumentMultiLine(string original)
+        {
+            if (string.IsNullOrEmpty(original))
+                return original;
+            string value = Regex.Replace(original, @"(\\*)" + "\"", @"$1\$0");
+            value = Regex.Replace(value, @"^(.*\s.*?)(\\*)$", "\"$1$2$2\"", RegexOptions.Singleline);
+
+            return value;
+        }
+
+        private void updateTimeTimer_Tick(object sender, EventArgs e)
+        {
+            var delta = (DateTime.Now - startTime);
+            delta.Add(TimeSpan.FromMilliseconds(-delta.Milliseconds));
+            lblStartTime.Text = delta.ToString(@"h\:mm\:ss");
+        }
+
+        private void Main_Move(object sender, EventArgs e)
+        {
+            SettingsManager.Set("lastPosX", Location.X);
+            SettingsManager.Set("lastPosY", Location.Y);
+            SettingsManager.Set("useLastPos", true);
         }
     }
 }
