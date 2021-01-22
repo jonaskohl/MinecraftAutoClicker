@@ -1,3 +1,4 @@
+# https://jonaskohl.de/software/mcautoclicker/docs/settings.html
 b:useLeft=False
 b:holdLeft=False
 i:delayLeft=200

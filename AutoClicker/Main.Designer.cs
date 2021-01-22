@@ -56,7 +56,7 @@
             // lblStartTime
             // 
             this.lblStartTime.AutoSize = true;
-            this.lblStartTime.Location = new System.Drawing.Point(94, 141);
+            this.lblStartTime.Location = new System.Drawing.Point(83, 141);
             this.lblStartTime.Name = "lblStartTime";
             this.lblStartTime.Size = new System.Drawing.Size(31, 15);
             this.lblStartTime.TabIndex = 2;
@@ -81,9 +81,9 @@
             this.lblStarted.AutoSize = true;
             this.lblStarted.Location = new System.Drawing.Point(12, 141);
             this.lblStarted.Name = "lblStarted";
-            this.lblStarted.Size = new System.Drawing.Size(85, 15);
+            this.lblStarted.Size = new System.Drawing.Size(73, 15);
             this.lblStarted.TabIndex = 6;
-            this.lblStarted.Text = "Running since:";
+            this.lblStarted.Text = "Running for:";
             this.lblStarted.Visible = false;
             // 
             // iconAnimateTimer

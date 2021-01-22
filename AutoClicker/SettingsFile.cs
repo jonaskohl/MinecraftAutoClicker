@@ -38,6 +38,7 @@ namespace AutoClicker
             foreach (var ln in lines)
             {
                 if (ln.Length < 1) continue;
+                if (ln.StartsWith("#")) continue;
                 var (typeAndKey, value) = ln.Split(new char[] { '=' }, 2, StringSplitOptions.None);
                 var (type, key) = typeAndKey.Split(new char[] { ':' }, 2, StringSplitOptions.None);
                 var t = GetSettingsType(type);
@@ -102,6 +103,8 @@ namespace AutoClicker
         public static void Save()
         {
             var sb = new StringBuilder();
+
+            sb.AppendLine("# https://jonaskohl.de/software/mcautoclicker/docs/settings.html");
 
             foreach (var s in Settings)
                 sb.AppendFormat("{0}:{1}={2}\n", GetSettingsTypeIndicator(s.Value.Item1), s.Key, ConvertToString(s.Value.Item2));
