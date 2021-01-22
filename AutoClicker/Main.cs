@@ -20,6 +20,20 @@ namespace AutoClicker
         public Main()
         {
             InitializeComponent();
+            Icon = Properties.Resources.mcautoclicker_normal;
+
+            Shown += Main_Shown;
+        }
+
+        private void Main_Shown(object sender, EventArgs e)
+        {
+            Shown -= Main_Shown;
+            biLeftMouse.Use = (bool)SettingsManager.Get("useLeft");
+            biLeftMouse.Hold = (bool)SettingsManager.Get("holdLeft");
+            biLeftMouse.Delay = (int)SettingsManager.Get("delayLeft");
+            biRightMouse.Use = (bool)SettingsManager.Get("useRight");
+            biRightMouse.Hold = (bool)SettingsManager.Get("holdRight");
+            biRightMouse.Delay = (int)SettingsManager.Get("delayRight");
         }
 
         private void Btn_action_Click(object sender, EventArgs e)
@@ -77,18 +91,20 @@ namespace AutoClicker
                     var minecraftHandle = mcProcess.MainWindowHandle;
                     FocusToggle(minecraftHandle);
 
-                    SetControlPropertyThreadSafe(btn_start, "Text", @"Starting in: ");
+                    //SetControlPropertyThreadSafe(btn_start, "Text", @"Starting in: ");
                     Thread.Sleep(500);
 
                     for (var i = 5; i > 0; i--)
                     {
-                        SetControlPropertyThreadSafe(btn_start, "Text", i.ToString());
+                        //SetControlPropertyThreadSafe(btn_start, "Text", i.ToString());
                         Thread.Sleep(500);
                     }
 
                     FocusToggle(mainHandle);
-                    SetControlPropertyThreadSafe(btn_start, "Text", @"Running...");
+                    //SetControlPropertyThreadSafe(btn_start, "Text", @"Running...");
                     Thread.Sleep(500);
+
+                    iconAnimateTimer.Start();
 
                     //Right click needs to be ahead of left click for concrete mining
                     if (biRightMouse.Needed)
@@ -133,6 +149,9 @@ namespace AutoClicker
         private void Stop()
         {
             btn_stop.Enabled = false;
+            btn_stop.Hide();
+            iconAnimateTimer.Stop();
+            Icon = Properties.Resources.mcautoclicker_normal;
 
             foreach (var clickers in instanceClickers.Values)
             {
@@ -147,7 +166,7 @@ namespace AutoClicker
             lblStarted.Visible = false;
             lblStartTime.Visible = false;
 
-            btn_start.Text = "START";
+            //btn_start.Text = "START";
             EnableElements(true);
         }
 
@@ -157,6 +176,7 @@ namespace AutoClicker
             biLeftMouse.Enabled = enable;
             biRightMouse.Enabled = enable;
             btn_stop.Enabled = !enable;
+            btn_stop.Visible = !enable;
         }
 
         private static void FocusToggle(IntPtr hwnd)
@@ -173,5 +193,51 @@ namespace AutoClicker
             else
                 control.GetType().InvokeMember(propertyName, BindingFlags.SetProperty, null, control, new[] { propertyValue });
         }//end SetControlPropertyThreadSafe
+
+        private void biLeftMouse_UseButtonChanged(object sender, EventArgs e)
+        {
+            SettingsManager.Set("useLeft", biLeftMouse.Use);
+        }
+
+        private void biLeftMouse_HoldButtonChanged(object sender, EventArgs e)
+        {
+            SettingsManager.Set("holdLeft", biLeftMouse.Hold);
+        }
+
+        private void biLeftMouse_DelayChanged(object sender, EventArgs e)
+        {
+            SettingsManager.Set("delayLeft", biLeftMouse.Delay);
+        }
+
+        private void biRightMouse_UseButtonChanged(object sender, EventArgs e)
+        {
+            SettingsManager.Set("useRight", biRightMouse.Use);
+        }
+
+        private void biRightMouse_HoldButtonChanged(object sender, EventArgs e)
+        {
+            SettingsManager.Set("holdRight", biRightMouse.Hold);
+        }
+
+        private void biRightMouse_DelayChanged(object sender, EventArgs e)
+        {
+            SettingsManager.Set("delayRight", biRightMouse.Delay);
+        }
+
+        int ico = 0;
+        private void iconAnimateTimer_Tick(object sender, EventArgs e)
+        {
+            if (ico == 0)
+                Icon = Properties.Resources.mcautoclicker_active0;
+            else if (ico == 1)
+                Icon = Properties.Resources.mcautoclicker_active1;
+            ico = (ico + 1) % 2;
+        }
+
+        private void menuItem1_Click(object sender, EventArgs e)
+        {
+            using (var f = new AboutBox1())
+                f.ShowDialog(this);
+        }
     }
 }

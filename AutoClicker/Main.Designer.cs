@@ -28,31 +28,35 @@
         /// </summary>
         private void InitializeComponent()
         {
+            this.components = new System.ComponentModel.Container();
             this.btn_start = new System.Windows.Forms.Button();
             this.lblStartTime = new System.Windows.Forms.Label();
             this.btn_stop = new System.Windows.Forms.Button();
-            this.biLeftMouse = new AutoClicker.ButtonInputs("Left mouse button", Win32Api.WmLbuttonDown, Win32Api.WmLbuttonDown + 1);
-            this.biRightMouse = new AutoClicker.ButtonInputs("Right mouse button", Win32Api.WmRbuttonDown, Win32Api.WmRbuttonDown + 1);
             this.lblStarted = new System.Windows.Forms.Label();
+            this.biRightMouse = new AutoClicker.ButtonInputs();
+            this.biLeftMouse = new AutoClicker.ButtonInputs();
+            this.iconAnimateTimer = new System.Windows.Forms.Timer(this.components);
+            this.mainMenu1 = new System.Windows.Forms.MainMenu(this.components);
+            this.menuItem1 = new System.Windows.Forms.MenuItem();
             this.SuspendLayout();
             // 
             // btn_start
             // 
-            this.btn_start.Location = new System.Drawing.Point(269, 160);
+            this.btn_start.FlatStyle = System.Windows.Forms.FlatStyle.System;
+            this.btn_start.Location = new System.Drawing.Point(12, 108);
             this.btn_start.Name = "btn_start";
-            this.btn_start.Size = new System.Drawing.Size(88, 51);
+            this.btn_start.Size = new System.Drawing.Size(580, 30);
             this.btn_start.TabIndex = 0;
-            this.btn_start.Text = "START!";
+            this.btn_start.Text = "&Start";
             this.btn_start.UseVisualStyleBackColor = true;
             this.btn_start.Click += new System.EventHandler(this.Btn_action_Click);
             // 
             // lblStartTime
             // 
             this.lblStartTime.AutoSize = true;
-            this.lblStartTime.Font = new System.Drawing.Font("Microsoft Sans Serif", 10F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(238)));
-            this.lblStartTime.Location = new System.Drawing.Point(233, 222);
+            this.lblStartTime.Location = new System.Drawing.Point(87, 141);
             this.lblStartTime.Name = "lblStartTime";
-            this.lblStartTime.Size = new System.Drawing.Size(34, 17);
+            this.lblStartTime.Size = new System.Drawing.Size(31, 15);
             this.lblStartTime.TabIndex = 2;
             this.lblStartTime.Text = "time";
             this.lblStartTime.Visible = false;
@@ -60,54 +64,94 @@
             // btn_stop
             // 
             this.btn_stop.Enabled = false;
-            this.btn_stop.Location = new System.Drawing.Point(165, 160);
+            this.btn_stop.FlatStyle = System.Windows.Forms.FlatStyle.System;
+            this.btn_stop.Location = new System.Drawing.Point(12, 108);
             this.btn_stop.Name = "btn_stop";
-            this.btn_stop.Size = new System.Drawing.Size(88, 51);
+            this.btn_stop.Size = new System.Drawing.Size(580, 30);
             this.btn_stop.TabIndex = 3;
-            this.btn_stop.Text = "STOP!";
+            this.btn_stop.Text = "Stop";
             this.btn_stop.UseVisualStyleBackColor = true;
+            this.btn_stop.Visible = false;
             this.btn_stop.Click += new System.EventHandler(this.Btn_stop_Click);
-            // 
-            // biLeftMouse
-            // 
-            this.biLeftMouse.Location = new System.Drawing.Point(12, 18);
-            this.biLeftMouse.Name = "biLeftMouse";
-            this.biLeftMouse.Size = new System.Drawing.Size(240, 130);
-            this.biLeftMouse.TabIndex = 4;
-            // 
-            // biRightMouse
-            // 
-            this.biRightMouse.Location = new System.Drawing.Point(258, 18);
-            this.biRightMouse.Name = "biRightMouse";
-            this.biRightMouse.Size = new System.Drawing.Size(240, 130);
-            this.biRightMouse.TabIndex = 5;
             // 
             // lblStarted
             // 
             this.lblStarted.AutoSize = true;
-            this.lblStarted.Font = new System.Drawing.Font("Microsoft Sans Serif", 10F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(238)));
-            this.lblStarted.Location = new System.Drawing.Point(162, 222);
+            this.lblStarted.Location = new System.Drawing.Point(12, 141);
             this.lblStarted.Name = "lblStarted";
-            this.lblStarted.Size = new System.Drawing.Size(74, 17);
+            this.lblStarted.Size = new System.Drawing.Size(60, 15);
             this.lblStarted.TabIndex = 6;
             this.lblStarted.Text = "Started at:";
             this.lblStarted.Visible = false;
             // 
+            // biRightMouse
+            // 
+            this.biRightMouse.ButtonDownCode = ((uint)(516u));
+            this.biRightMouse.ButtonName = "Right mouse button";
+            this.biRightMouse.ButtonUpCode = ((uint)(517u));
+            this.biRightMouse.Delay = 200;
+            this.biRightMouse.Font = new System.Drawing.Font("Segoe UI", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.biRightMouse.Hold = false;
+            this.biRightMouse.Location = new System.Drawing.Point(301, 21);
+            this.biRightMouse.Name = "biRightMouse";
+            this.biRightMouse.Size = new System.Drawing.Size(280, 81);
+            this.biRightMouse.TabIndex = 5;
+            this.biRightMouse.Use = false;
+            this.biRightMouse.UseButtonChanged += new System.EventHandler(this.biRightMouse_UseButtonChanged);
+            this.biRightMouse.HoldButtonChanged += new System.EventHandler(this.biRightMouse_HoldButtonChanged);
+            this.biRightMouse.DelayChanged += new System.EventHandler(this.biRightMouse_DelayChanged);
+            // 
+            // biLeftMouse
+            // 
+            this.biLeftMouse.ButtonDownCode = ((uint)(513u));
+            this.biLeftMouse.ButtonName = "Left mouse button";
+            this.biLeftMouse.ButtonUpCode = ((uint)(514u));
+            this.biLeftMouse.Delay = 200;
+            this.biLeftMouse.Font = new System.Drawing.Font("Segoe UI", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.biLeftMouse.Hold = false;
+            this.biLeftMouse.Location = new System.Drawing.Point(14, 21);
+            this.biLeftMouse.Name = "biLeftMouse";
+            this.biLeftMouse.Size = new System.Drawing.Size(280, 81);
+            this.biLeftMouse.TabIndex = 4;
+            this.biLeftMouse.Use = false;
+            this.biLeftMouse.UseButtonChanged += new System.EventHandler(this.biLeftMouse_UseButtonChanged);
+            this.biLeftMouse.HoldButtonChanged += new System.EventHandler(this.biLeftMouse_HoldButtonChanged);
+            this.biLeftMouse.DelayChanged += new System.EventHandler(this.biLeftMouse_DelayChanged);
+            // 
+            // iconAnimateTimer
+            // 
+            this.iconAnimateTimer.Interval = 250;
+            this.iconAnimateTimer.Tick += new System.EventHandler(this.iconAnimateTimer_Tick);
+            // 
+            // mainMenu1
+            // 
+            this.mainMenu1.MenuItems.AddRange(new System.Windows.Forms.MenuItem[] {
+            this.menuItem1});
+            // 
+            // menuItem1
+            // 
+            this.menuItem1.Index = 0;
+            this.menuItem1.Text = "&About...";
+            this.menuItem1.Click += new System.EventHandler(this.menuItem1_Click);
+            // 
             // Main
             // 
-            this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
+            this.AutoScaleDimensions = new System.Drawing.SizeF(7F, 15F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(518, 250);
+            this.ClientSize = new System.Drawing.Size(604, 169);
             this.Controls.Add(this.lblStarted);
             this.Controls.Add(this.biRightMouse);
             this.Controls.Add(this.biLeftMouse);
             this.Controls.Add(this.btn_stop);
             this.Controls.Add(this.lblStartTime);
             this.Controls.Add(this.btn_start);
-            this.FormBorderStyle = System.Windows.Forms.FormBorderStyle.FixedDialog;
+            this.Font = new System.Drawing.Font("Segoe UI", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.FormBorderStyle = System.Windows.Forms.FormBorderStyle.FixedSingle;
             this.MaximizeBox = false;
+            this.Menu = this.mainMenu1;
             this.MinimizeBox = false;
             this.Name = "Main";
+            this.StartPosition = System.Windows.Forms.FormStartPosition.CenterScreen;
             this.Text = "Auto-Clicker";
             this.ResumeLayout(false);
             this.PerformLayout();
@@ -122,6 +166,9 @@
         private ButtonInputs biLeftMouse;
         private ButtonInputs biRightMouse;
         private System.Windows.Forms.Label lblStarted;
+        private System.Windows.Forms.Timer iconAnimateTimer;
+        private System.Windows.Forms.MainMenu mainMenu1;
+        private System.Windows.Forms.MenuItem menuItem1;
     }
 }
 

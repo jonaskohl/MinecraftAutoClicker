@@ -1,0 +1,7 @@
+b:useLeft=False
+b:holdLeft=False
+i:delayLeft=200
+b:useRight=False
+b:holdRight=False
+i:delayRight=200
+s:lastMCPath=

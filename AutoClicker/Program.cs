@@ -13,7 +13,15 @@ namespace AutoClicker
         {
             Application.EnableVisualStyles();
             Application.SetCompatibleTextRenderingDefault(false);
+
+            SettingsManager.Load();
+
+            var o = new OptionsTxtNotice();
+            o.ShowDialog();
+
             Application.Run(new Main());
+
+            SettingsManager.Save();
         }
     }
 }

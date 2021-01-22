@@ -9,8 +9,9 @@
     <AppDesignerFolder>Properties</AppDesignerFolder>
     <RootNamespace>AutoClicker</RootNamespace>
     <AssemblyName>AutoClicker</AssemblyName>
-    <TargetFrameworkVersion>v4.5</TargetFrameworkVersion>
+    <TargetFrameworkVersion>v4.8</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
+    <TargetFrameworkProfile />
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
     <PlatformTarget>AnyCPU</PlatformTarget>
@@ -31,6 +32,12 @@
     <ErrorReport>prompt</ErrorReport>
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
+  <PropertyGroup>
+    <ApplicationManifest>app.manifest</ApplicationManifest>
+  </PropertyGroup>
+  <PropertyGroup>
+    <ApplicationIcon>mcautoclicker_normal.ico</ApplicationIcon>
+  </PropertyGroup>
   <ItemGroup>
     <Reference Include="System" />
     <Reference Include="System.Core" />
@@ -44,17 +51,28 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="AboutBox1.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="AboutBox1.Designer.cs">
+      <DependentUpon>AboutBox1.cs</DependentUpon>
+    </Compile>
     <Compile Include="Clicker.cs" />
     <Compile Include="Controls\ValueCheckBox.cs">
       <SubType>Component</SubType>
     </Compile>
+    <Compile Include="ExtensionMethods.cs" />
     <Compile Include="Extensions.cs" />
+    <Compile Include="LinkLabelEx.cs">
+      <SubType>Component</SubType>
+    </Compile>
     <Compile Include="Main.cs">
       <SubType>Form</SubType>
     </Compile>
     <Compile Include="Main.Designer.cs">
       <DependentUpon>Main.cs</DependentUpon>
     </Compile>
+    <Compile Include="MinecraftDirectoryDetector.cs" />
     <Compile Include="MultipleInstances.cs">
       <SubType>Form</SubType>
     </Compile>
@@ -67,6 +85,13 @@
     <Compile Include="NotRunning.Designer.cs">
       <DependentUpon>NotRunning.cs</DependentUpon>
     </Compile>
+    <Compile Include="OptionsTxtChecker.cs" />
+    <Compile Include="OptionsTxtNotice.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="OptionsTxtNotice.Designer.cs">
+      <DependentUpon>OptionsTxtNotice.cs</DependentUpon>
+    </Compile>
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="ButtonInputs.cs">
@@ -75,7 +100,11 @@
     <Compile Include="ButtonInputs.Designer.cs">
       <DependentUpon>ButtonInputs.cs</DependentUpon>
     </Compile>
+    <Compile Include="SettingsFile.cs" />
     <Compile Include="Win32Api.cs" />
+    <EmbeddedResource Include="AboutBox1.resx">
+      <DependentUpon>AboutBox1.cs</DependentUpon>
+    </EmbeddedResource>
     <EmbeddedResource Include="Main.resx">
       <DependentUpon>Main.cs</DependentUpon>
     </EmbeddedResource>
@@ -85,6 +114,9 @@
     <EmbeddedResource Include="NotRunning.resx">
       <DependentUpon>NotRunning.cs</DependentUpon>
     </EmbeddedResource>
+    <EmbeddedResource Include="OptionsTxtNotice.resx">
+      <DependentUpon>OptionsTxtNotice.cs</DependentUpon>
+    </EmbeddedResource>
     <EmbeddedResource Include="Properties\Resources.resx">
       <Generator>ResXFileCodeGenerator</Generator>
       <LastGenOutput>Resources.Designer.cs</LastGenOutput>
@@ -93,10 +125,12 @@
     <Compile Include="Properties\Resources.Designer.cs">
       <AutoGen>True</AutoGen>
       <DependentUpon>Resources.resx</DependentUpon>
+      <DesignTime>True</DesignTime>
     </Compile>
     <EmbeddedResource Include="ButtonInputs.resx">
       <DependentUpon>ButtonInputs.cs</DependentUpon>
     </EmbeddedResource>
+    <None Include="app.manifest" />
     <None Include="Properties\Settings.settings">
       <Generator>SettingsSingleFileGenerator</Generator>
       <LastGenOutput>Settings.Designer.cs</LastGenOutput>
@@ -109,6 +143,15 @@
   </ItemGroup>
   <ItemGroup>
     <None Include="App.config" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\defaultSettings.txt" />
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="mcautoclicker_normal.ico" />
+    <None Include="Resources\mcautoclicker_normal.ico" />
+    <None Include="Resources\mcautoclicker_active0.ico" />
+    <None Include="Resources\mcautoclicker_active1.ico" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
