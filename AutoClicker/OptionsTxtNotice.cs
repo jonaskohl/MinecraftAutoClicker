@@ -18,6 +18,7 @@ namespace AutoClicker
         public OptionsTxtNotice()
         {
             InitializeComponent();
+            Opacity = 0;
 
             Shown += OptionsTxtNotice_Shown;
         }
@@ -30,6 +31,11 @@ namespace AutoClicker
             comboBox1.SelectedIndex = Math.Max(0, Array.IndexOf(dirs, SettingsManager.Get("lastMCPath")));
             invokeSelectedIndexChanged = true;
             comboBox1_SelectedIndexChanged(comboBox1, EventArgs.Empty);
+
+            if (dirs.Where(x => !OptionsTxtChecker.CheckPauseOnLostFocusReady(x)).Count() < 1)
+                Close();
+            else
+                Opacity = 1;
         }
 
         private void comboBox1_SelectedIndexChanged(object sender, EventArgs e)
