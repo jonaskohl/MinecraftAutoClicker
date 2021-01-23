@@ -59,6 +59,7 @@ namespace AutoClicker
             foreach (var ln in lines)
             {
                 if (ln.Length < 1) continue;
+                if (ln.StartsWith("#")) continue;
                 var (typeAndKey, value) = ln.Split(new char[] { '=' }, 2, StringSplitOptions.None);
                 var (type, key) = typeAndKey.Split(new char[] { ':' }, 2, StringSplitOptions.None);
                 var t = GetSettingsType(type);

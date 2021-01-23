@@ -63,6 +63,13 @@
     </Compile>
     <Compile Include="ExtensionMethods.cs" />
     <Compile Include="Extensions.cs" />
+    <Compile Include="KeyBindingForm.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="KeyBindingForm.Designer.cs">
+      <DependentUpon>KeyBindingForm.cs</DependentUpon>
+    </Compile>
+    <Compile Include="KeyboardHook.cs" />
     <Compile Include="LinkLabelEx.cs">
       <SubType>Component</SubType>
     </Compile>
@@ -105,6 +112,9 @@
     <Compile Include="Win32Api.cs" />
     <EmbeddedResource Include="AboutBox1.resx">
       <DependentUpon>AboutBox1.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="KeyBindingForm.resx">
+      <DependentUpon>KeyBindingForm.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="Main.resx">
       <DependentUpon>Main.cs</DependentUpon>

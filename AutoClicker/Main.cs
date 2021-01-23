@@ -11,6 +11,12 @@ namespace AutoClicker
 {
     public partial class Main : Form
     {
+        private KeyboardHook Hook;
+        private ModifierKeys HModifierKeys;
+        private Keys HKey;
+        private bool HOpen;
+        private bool isRunning;
+
         private readonly Dictionary<Process, List<Clicker>> instanceClickers = new Dictionary<Process, List<Clicker>>();
         private static readonly List<string> WindowTitles = new List<string>
         {
@@ -37,6 +43,14 @@ namespace AutoClicker
                     SettingsManager.Get<int>("lastPosY")
                 );
             }
+
+            HModifierKeys = (ModifierKeys)SettingsManager.Get<int>("hotkeyModifiers");
+            HKey = (Keys)SettingsManager.Get<int>("hotkeyMain");
+
+            if (HModifierKeys != AutoClicker.ModifierKeys.None && HKey != Keys.None)
+            {
+                RegisterHook();
+            }
         }
 
         private void Main_Shown(object sender, EventArgs e)
@@ -51,6 +65,11 @@ namespace AutoClicker
         }
 
         private void Btn_action_Click(object sender, EventArgs e)
+        {
+            Start();
+        }
+
+        private void Start()
         {
             try
             {
@@ -101,6 +120,7 @@ namespace AutoClicker
                 lblStartTime.Visible = true;
                 updateTimeTimer.Start();
                 updateTimeTimer_Tick(updateTimeTimer, EventArgs.Empty);
+                isRunning = true;
 
                 foreach (var mcProcess in mcProcesses)
                 {
@@ -114,7 +134,7 @@ namespace AutoClicker
                         Thread.Sleep(SettingsManager.Get<int>("delayLength"));
 
                     FocusToggle(mainHandle);
-                    Thread.Sleep(500);
+                    //Thread.Sleep(500);
 
                     iconAnimateTimer.Start();
                     if (SettingsManager.Get<bool>("useTaskbarIndicator"))
@@ -126,7 +146,7 @@ namespace AutoClicker
                         AddToInstanceClickers(mcProcess, clicker);
                     }
 
-                    Thread.Sleep(100);
+                    //Thread.Sleep(100);
 
                     if (biLeftMouse.Needed)
                     {
@@ -157,6 +177,7 @@ namespace AutoClicker
 
         private void Stop()
         {
+            isRunning = false;
             btn_stop.Enabled = false;
             btn_stop.Hide();
             iconAnimateTimer.Stop();
@@ -298,6 +319,74 @@ namespace AutoClicker
             SettingsManager.Set("lastPosX", Location.X);
             SettingsManager.Set("lastPosY", Location.Y);
             SettingsManager.Set("useLastPos", true);
+        }
+
+        private void button1_Click(object sender, EventArgs e)
+        {
+            
+        }
+
+        private void UnregisterHook()
+        {
+            if (Hook != null)
+            {
+                Hook.KeyPressed -= Hook_KeyPressed;
+                Hook.Dispose();
+
+                Hook = null;
+            }
+        }
+
+        private void RegisterHook()
+        {
+            UnregisterHook();
+
+            Hook = new KeyboardHook();
+            Hook.RegisterHotKey(HModifierKeys, HKey);
+            Hook.KeyPressed += Hook_KeyPressed;
+        }
+
+        private void Hook_KeyPressed(object sender, KeyPressedEventArgs e)
+        {
+            if (HOpen) return;
+            if (isRunning)
+                Stop();
+            else
+                Start();
+        }
+
+        private void menuItem3_Click(object sender, EventArgs e)
+        {
+            using (var f = new KeyBindingForm())
+            {
+                f.UseHook = Hook != null;
+                f.HModifierKeys = HModifierKeys;
+                f.HKey = HKey;
+                f.Display();
+                HOpen = true;
+                var r = f.ShowDialog(this);
+                HOpen = false;
+                if (r == DialogResult.OK)
+                {
+                    if (f.UseHook)
+                    {
+                        HModifierKeys = f.HModifierKeys;
+                        HKey = f.HKey;
+
+                        RegisterHook();
+
+                        SettingsManager.Set("hotkeyModifiers", (int)HModifierKeys);
+                        SettingsManager.Set("hotkeyMain", (int)HKey);
+                    }
+                    else
+                    {
+                        UnregisterHook();
+
+                        SettingsManager.Set("hotkeyModifiers", 0);
+                        SettingsManager.Set("hotkeyMain", 0);
+                    }
+                }
+            }
         }
     }
 }

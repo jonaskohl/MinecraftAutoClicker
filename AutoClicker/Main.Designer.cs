@@ -38,6 +38,7 @@
             this.menuItem2 = new System.Windows.Forms.MenuItem();
             this.menuItem1 = new System.Windows.Forms.MenuItem();
             this.updateTimeTimer = new System.Windows.Forms.Timer(this.components);
+            this.menuItem3 = new System.Windows.Forms.MenuItem();
             this.biRightMouse = new AutoClicker.ButtonInputs();
             this.biLeftMouse = new AutoClicker.ButtonInputs();
             this.SuspendLayout();
@@ -95,6 +96,7 @@
             // 
             this.mainMenu1.MenuItems.AddRange(new System.Windows.Forms.MenuItem[] {
             this.menuItem2,
+            this.menuItem3,
             this.menuItem1});
             // 
             // menuItem2
@@ -105,7 +107,7 @@
             // 
             // menuItem1
             // 
-            this.menuItem1.Index = 1;
+            this.menuItem1.Index = 2;
             this.menuItem1.Text = "&About...";
             this.menuItem1.Click += new System.EventHandler(this.menuItem1_Click);
             // 
@@ -113,6 +115,12 @@
             // 
             this.updateTimeTimer.Interval = 500;
             this.updateTimeTimer.Tick += new System.EventHandler(this.updateTimeTimer_Tick);
+            // 
+            // menuItem3
+            // 
+            this.menuItem3.Index = 1;
+            this.menuItem3.Text = "&Hotkey...";
+            this.menuItem3.Click += new System.EventHandler(this.menuItem3_Click);
             // 
             // biRightMouse
             // 
@@ -164,7 +172,7 @@
             this.MaximizeBox = false;
             this.Name = "Main";
             this.StartPosition = System.Windows.Forms.FormStartPosition.CenterScreen;
-            this.Text = "Auto-Clicker";
+            this.Text = "Minecraft Auto-Clicker";
             this.Move += new System.EventHandler(this.Main_Move);
             this.ResumeLayout(false);
             this.PerformLayout();
@@ -184,6 +192,7 @@
         private System.Windows.Forms.MenuItem menuItem1;
         private System.Windows.Forms.MenuItem menuItem2;
         private System.Windows.Forms.Timer updateTimeTimer;
+        private System.Windows.Forms.MenuItem menuItem3;
     }
 }
 
