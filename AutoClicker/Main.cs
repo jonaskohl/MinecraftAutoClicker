@@ -47,10 +47,30 @@ namespace AutoClicker
             HModifierKeys = (ModifierKeys)SettingsManager.Get<int>("hotkeyModifiers");
             HKey = (Keys)SettingsManager.Get<int>("hotkeyMain");
 
-            if (HModifierKeys != AutoClicker.ModifierKeys.None && HKey != Keys.None)
+            if (HKey != Keys.None)
             {
                 RegisterHook();
             }
+
+            SettingsManager.SettingsFileChanged += SettingsManager_SettingsFileChanged;
+        }
+
+        private void SettingsManager_SettingsFileChanged(object sender, EventArgs e)
+        {
+            HModifierKeys = (ModifierKeys)SettingsManager.Get<int>("hotkeyModifiers");
+            HKey = (Keys)SettingsManager.Get<int>("hotkeyMain");
+
+            if (HKey != Keys.None)
+                RegisterHook();
+            else
+                UnregisterHook();
+
+            biLeftMouse.Use = (bool)SettingsManager.Get("useLeft");
+            biLeftMouse.Hold = (bool)SettingsManager.Get("holdLeft");
+            biLeftMouse.Delay = (int)SettingsManager.Get("delayLeft");
+            biRightMouse.Use = (bool)SettingsManager.Get("useRight");
+            biRightMouse.Hold = (bool)SettingsManager.Get("holdRight");
+            biRightMouse.Delay = (int)SettingsManager.Get("delayRight");
         }
 
         private void Main_Shown(object sender, EventArgs e)
@@ -285,6 +305,7 @@ namespace AutoClicker
 
         private void menuItem2_Click(object sender, EventArgs e)
         {
+            SettingsManager.Save();
             Process.Start(Environment.ExpandEnvironmentVariables(@"%systemroot%\system32\notepad.exe"), EncodeParameterArgument(SettingsManager.SettingsFilePath));
         }
 

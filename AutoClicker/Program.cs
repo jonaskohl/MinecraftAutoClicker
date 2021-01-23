@@ -22,12 +22,14 @@ namespace AutoClicker
                 File.Move(SettingsManager.SettingsFilePathOld, SettingsManager.SettingsFilePath);
 
             SettingsManager.Load();
+            SettingsManager.BeginWatch();
 
             var o = new OptionsTxtNotice();
             o.ShowDialog();
 
             Application.Run(new Main());
 
+            SettingsManager.EndWatch();
             SettingsManager.Save();
         }
     }

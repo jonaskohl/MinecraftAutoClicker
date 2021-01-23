@@ -5,7 +5,9 @@ using System.IO;
 using System.Linq;
 using System.Reflection;
 using System.Text;
+using System.Threading;
 using System.Threading.Tasks;
+using System.Windows.Forms;
 
 namespace AutoClicker
 {
@@ -21,12 +23,50 @@ namespace AutoClicker
             "last_settings"
         ));
 
+        private static FileSystemWatcher watcher;
+
         private static Dictionary<string, (Type, object)> Settings;
+
+        public static event EventHandler SettingsFileChanged;
+
+        private static bool isAutoSaving = false;
 
         public static void Load()
         {
             LoadDefaults();
             LoadUser();
+        }
+
+        public static void BeginWatch()
+        {
+            watcher = new FileSystemWatcher();
+            watcher.Path = Path.GetDirectoryName(SettingsFilePath);
+            watcher.Filter = Path.GetFileName(SettingsFilePath);
+            watcher.Changed += Watcher_Changed;
+            watcher.EnableRaisingEvents = true;
+        }
+
+        public static void EndWatch()
+        {
+            if (watcher == null)
+                return;
+            watcher.Changed -= Watcher_Changed;
+            watcher.Dispose();
+            watcher = null;
+        }
+
+        private static void Watcher_Changed(object sender, FileSystemEventArgs e)
+        {
+            if (isAutoSaving)
+            {
+                isAutoSaving = false;
+                return;
+            }
+
+            Thread.Sleep(500);
+
+            Load();
+            SettingsFileChanged?.Invoke(null, EventArgs.Empty);
         }
 
         private static void LoadDefaults()
@@ -103,6 +143,7 @@ namespace AutoClicker
 
         public static void Save()
         {
+            isAutoSaving = true;
             var sb = new StringBuilder();
 
             sb.AppendLine("# https://jonaskohl.de/software/mcautoclicker/docs/settings.html");
